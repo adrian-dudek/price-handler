@@ -1,0 +1,17 @@
+[
+	{
+		"instrumentName": "EUR/USD",
+		"sellPrice": 1.1011,
+		"buyPrice": 1.1988
+	},
+	{
+		"instrumentName": "EUR/JPY",
+		"sellPrice": 119.7196,
+		"buyPrice": 119.7801
+	},
+	{
+		"instrumentName": "GBP/USD",
+		"sellPrice": 1.2511,
+		"buyPrice": 1.2548
+	}
+]
