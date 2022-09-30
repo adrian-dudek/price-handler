@@ -6,7 +6,7 @@ import pl.sii.price.domain.entity.PriceFeed;
 
 public interface PriceFeedRepository {
 
-    void persist(PriceFeed priceFeed);
+    void persistIfIsTheLatest(PriceFeed priceFeed);
     
     Optional<PriceFeed> find(String instrumentName);
 }

@@ -36,20 +36,12 @@ public class PriceFeedCommissionService implements PriceFeedService {
                 .multiply(sellCommissionIndicator)
                 .setScale(scaleCalculation, roundingMode));
         
-        priceFeedRepository.find(priceFeed.getInstrumentName()).ifPresentOrElse(
-                existedPriceFeed -> persistIfTheLatest(existedPriceFeed, priceFeed),
-                () -> priceFeedRepository.persist(priceFeed));
+        priceFeedRepository.persistIfIsTheLatest(priceFeed);
     }
 
     @Override
     public PriceFeed get(String instrumentName) {
         return priceFeedRepository.find(instrumentName).orElseThrow(() -> new PriceFeedNotExists(
                 String.format("Can't find price feed for instrumentName: %s", instrumentName)));
-    }
-    
-    private void persistIfTheLatest(PriceFeed existedPriceFeed, PriceFeed newPriceFeed) {
-        if(newPriceFeed.getTimestamp().isAfter(existedPriceFeed.getTimestamp())) {
-            priceFeedRepository.persist(newPriceFeed);
-        }
     }
 }

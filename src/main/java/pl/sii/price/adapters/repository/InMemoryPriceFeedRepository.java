@@ -16,18 +16,20 @@ public class InMemoryPriceFeedRepository implements PriceFeedRepository{
     }
     
     @Override
-    public void persist(PriceFeed priceFeed) {
-        priceFeedMap.put(priceFeed.getInstrumentName(), priceFeed);       
+    public void persistIfIsTheLatest(PriceFeed priceFeed) {        
+        priceFeedMap.compute(
+                priceFeed.getInstrumentName(),
+                (existedInstrumentName, existedPriceFeed) -> getTheLatest(existedPriceFeed, priceFeed));      
     }
 
     @Override
     public Optional<PriceFeed> find(String instrumentName) {
-        PriceFeed priceFeed = priceFeedMap.get(instrumentName);
-        if(priceFeed != null) {
-            return Optional.of(priceFeed);
-        }
-        else {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(priceFeedMap.get(instrumentName));
+    }
+    
+    private PriceFeed getTheLatest(PriceFeed existedPriceFeed, PriceFeed newPriceFeed) {
+        return existedPriceFeed == null || newPriceFeed.getTimestamp().isAfter(existedPriceFeed.getTimestamp())
+                ? newPriceFeed 
+                : existedPriceFeed;
     }
 }
